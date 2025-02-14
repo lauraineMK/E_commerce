@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini E-Commerce</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; }
+        .products, .cart { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .product, .cart-item { border: 1px solid #ddd; padding: 10px; text-align: center; background: #fff; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        button { background: blue; color: white; border: none; padding: 10px; cursor: pointer; }
+        button:hover { background: darkblue; }
+        .remove { background: red; }
+        .remove:hover { background: darkred; }
+        .total { font-weight: bold; text-align: right; padding-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🛒 Mini E-Commerce</h1>
+
+    <!-- Produits -->
+    <h2>Produits</h2>
+    <div class="products">
+        <div class="product" data-id="1" data-name="Laptop" data-price="1200">
+            <h3>Laptop</h3>
+            <p>💰 1200€</p>
+            <button onclick="addToCart(1, 'Laptop', 1200)">Ajouter</button>
+        </div>
+        <div class="product" data-id="2" data-name="Smartphone" data-price="800">
+            <h3>Smartphone</h3>
+            <p>💰 800€</p>
+            <button onclick="addToCart(2, 'Smartphone', 800)">Ajouter</button>
+        </div>
+    </div>
+
+    <!-- Panier -->
+    <h2>Panier</h2>
+    <div class="cart"></div>
+    <p class="total">Total : <span id="total">0</span>€</p>
+</div>
+
+<script>
+    let cart = [];
+
+    function addToCart(id, name, price) {
+        const existing = cart.find(item => item.id === id);
+        if (existing) {
+            existing.qty++;
+        } else {
+            cart.push({ id, name, price, qty: 1 });
+        }
+        updateCart();
+    }
+
+    function removeFromCart(id) {
+        cart = cart.filter(item => item.id !== id);
+        updateCart();
+    }
+
+    function updateCart() {
+        const cartContainer = document.querySelector(".cart");
+        cartContainer.innerHTML = "";
+        let total = 0;
+
+        cart.forEach(item => {
+            total += item.price * item.qty;
+            cartContainer.innerHTML += `
+                <div class="cart-item">
+                    <span>${item.name} x${item.qty} - ${item.price * item.qty}€</span>
+                    <button class="remove" onclick="removeFromCart(${item.id})">❌</button>
+                </div>`;
+        });
+
+        document.getElementById("total").innerText = total;
+    }
+</script>
+
+</body>
+</html>
+n
